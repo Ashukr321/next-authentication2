@@ -1,80 +1,112 @@
 "use client";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 import Link from "next/link";
-import { use, useEffect, useState } from "react";
 import Aos from 'aos'
 import 'aos/dist/aos.css'
-import {toast} from "react-hot-toast";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-export default function SignUpPage() {
-//   create  the object of the  usrRouter 
-  const router = useRouter();
 
+const SignupPage = () => {
   useEffect(()=>{
     Aos.init();
-  },[])
-  const { user, setUser } = useState({
-    name: "",
+  })
+  //  create object of the useRouter
+  const router = useRouter();
+
+  const [user, setUser] = useState({
+    username: "",
     email: "",
     password: "",
   });
 
-  const singupHandler = async()=>{
-     
-  }
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
 
+  const onSignup = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.post("/api/users/signup", user);
+      router.push("/login");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
+    if (
+      user.username.length > 0 &&
+      user.email.length > 0 &&
+      user.password.length > 0
+    ) {
+      setButtonDisabled(false);
+    } else {
+      setButtonDisabled(true);
+    }
+  }, [user]);
   return (
     <div className="h-screen flex justify-center items-center bg-slate-800">
-      <div className="w-[360px] p-4 bg-white rounded-xl shadow-xl " data-aos="fade-down">
-        <h1 className="text-center font-bold mb-2 text-2xl text-blue-500">Sign Up</h1>
-        <hr className="font-bold mb-4 " />
-        <form  onSubmit={singupHandler}>
+      <div className=" size-[420px] p-4  bg-white rounded-xl shadow-xl" data-aos="fade-down">
+        <h1>{loading ? "processing" : ""}</h1>
 
-          <label htmlFor="name" className="block mb-1">
-            Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            required
+        <h1 className="text-center text-2xl font-bold mb-2">Signup</h1>
 
-            className="border-2  border-zinc-500 text-black p-1 mb-3 w-full"
-            placeholder="Name"
-          />
+        <label htmlFor="username" className="mb-1 text-xl">
+          userName
+        </label>
+        <input
+          type="text"
+          required
+          id="username"
+          placeholder="username"
+          className="mb-3 border-2 w-full p-2 text-black border-zinc-500"
+          onChange={e => setUser({ ...user, username: e.target.value })}
+          value={user.username}
+        />
 
-          <label htmlFor="email" className="block mb-1">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            required
-            className="border-2  border-zinc-500 text-black p-1 mb-3 w-full"
-            placeholder="Email"
-          /> 
+        <label htmlFor="email" className="mb-1 text-xl">
+          Email Address
+        </label>
+        <input
+          type="email"
+          required
+          id="email"
+          placeholder="email"
+          className="mb-3 border-2 w-full p-2 text-black border-zinc-500"
+          onChange={e => setUser({ ...user, email: e.target.value })}
+          value={user.email}
+        />
 
-<label htmlFor="password" className="block mb-1">
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            required
-            className="border-2  border-zinc-500 text-black p-1 mb-3 w-full"
-            placeholder="Email"
-          /> 
+        <label htmlFor="password" className="mb-1 text-xl">
+          Password
+        </label>
+        <input
+          type="password"
+          id="password"
+          placeholder="password"
+          required
 
-          <button className="block bg-blue-500 text-white m-auto px-14 hover:shadow-2xl  py-2 border mt-4 hover:bg-purple-700 hover:text-white" style={{borderRadius:"50px"}} >Submit</button>
+          className="mb-3 border-2 w-full p-2 text-black border-zinc-500"
+          onChange={e => setUser({ ...user, password: e.target.value })}
+          value={user.password}
+        />
 
+        <button onClick={onSignup}
+          className="w-full bg-blue-500 text-white p-2 rounded-sm hover:bg-purple-500"
+          
+          style={{borderRadius:"50px"}}
+        >
+          {" "}
+          {buttonDisabled ? "no Signup" : "Signup"}
+        </button>
 
-        </form>
-        <h1 className="mt-3">Already have a Account</h1>
-        <Link href={'/login'}>
-        <p className="ml-48 mb-4 hover:underline hover:text-blue-500">go to login</p>
-        </Link>
-        
+        <h1 className="mt-3">Already Have a Account</h1>
+        <Link href={'/login'} className="pl-48 hover:text-blue-500 hover:underline">Go to Login</Link>
       </div>
     </div>
   );
-}
+};
+
+export default SignupPage;
