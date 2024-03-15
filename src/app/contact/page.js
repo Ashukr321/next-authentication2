@@ -22,7 +22,6 @@ const page = () => {
     try {
       const res = await axios.post('/api/users/sendemail',user)
       toast.success(res.data.message)
-      
       router.push('/')
     } catch (error) {
       toast.error(error.message)
