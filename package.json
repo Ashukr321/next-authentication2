@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/nodemailer": "^6.4.14",
     "aos": "^2.3.4",
     "axios": "^1.6.7",
     "bcryptjs": "^2.4.3",

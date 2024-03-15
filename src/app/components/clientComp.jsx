@@ -54,7 +54,14 @@ const ProfileDetails= ()=>{
           <div className="w-[300] p-10 bg-white rounded-xl h-[240]" data-aos="zoom-in">
             <h1 className="text-3xl">username: <span className="text-purple-500">{data.username}</span></h1>
             <p className="mt-4 text-orange-400"> Email:<span className="text-purple-500 ml-4">{data.email}</span></p>
+            <Link href={'/'} className="mx-auto">
+              <button className="bg-purple-500 px-14 py-3 w-full mt-3 text-white"> go to home</button>
+            </Link>
+            <Link href={'/contact'} className="mx-auto">
+              <button className="bg-purple-500 px-14 py-3 w-full mt-3 text-white"> contact</button>
+            </Link>
           </div>
+         
       </div>
     </>
   )
